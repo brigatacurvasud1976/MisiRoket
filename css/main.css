@@ -1,0 +1,170 @@
+/* css/main.css - Core theme, variables, cosmic starry background & layout */
+:root {
+  --bg-dark: #0a0e1a;
+  --bg-surface: rgba(18, 24, 38, 0.85);
+  --bg-surface-glass: rgba(26, 34, 52, 0.65);
+  --border-glass: rgba(255, 255, 255, 0.12);
+  --border-focus: #38bdf8;
+
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+
+  --accent-cyan: #38bdf8;
+  --accent-amber: #f59e0b;
+  --accent-emerald: #10b981;
+  --accent-rose: #f43f5e;
+  --accent-violet: #a855f7;
+
+  --glow-cyan: 0 0 20px rgba(56, 189, 248, 0.4);
+  --glow-gold: 0 0 20px rgba(245, 158, 11, 0.5);
+  --glow-emerald: 0 0 20px rgba(16, 185, 129, 0.5);
+
+  --font-main: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+
+  --header-height: 64px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  overflow-x: hidden;
+  min-height: 100vh;
+  position: relative;
+  user-select: none;
+}
+
+/* Latar Belakang Luar Angkasa Berlapis & Partikel Bintang */
+.space-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -2;
+  overflow: hidden;
+  background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+}
+
+#starCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Kontainer Utama Game */
+#app {
+  width: 100%;
+  max-width: 1200px;
+  min-height: 100vh;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Header Bar / HUD */
+.game-header {
+  height: var(--header-height);
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-surface-glass);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-glass);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.brand-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.brand-logo-icon {
+  width: 36px;
+  height: 36px;
+  fill: var(--accent-cyan);
+  filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.6));
+}
+
+.brand-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  background: linear-gradient(90deg, #38bdf8, #818cf8, #f472b6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hud-stats {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.stat-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(15, 23, 42, 0.7);
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-glass);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.stat-chip.fuel-chip {
+  color: #38bdf8;
+}
+
+.stat-chip.stars-chip {
+  color: #fbbf24;
+}
+
+.hud-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* View Container & Transisi Layar */
+.view-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding: 24px 20px;
+}
+
+.game-screen {
+  display: none;
+  width: 100%;
+  opacity: 1;
+}
+
+.game-screen.active {
+  display: flex;
+  flex-direction: column;
+}

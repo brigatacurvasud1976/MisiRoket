@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <meta name="description" content="Misi Roket: Petualangan Tata Surya - Game interaktif edukasi IPA Tata Surya untuk siswa SD kelas 5-6 dan SMP kelas 7.">
+  <title>Misi Roket: Petualangan Tata Surya</title>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <!-- Latar Belakang Luar Angkasa Berlapis & Partikel Bintang -->
+  <div class="space-background" aria-hidden="true">
+    <canvas id="starCanvas"></canvas>
+  </div>
+
+  <div id="app">
+
+    <!-- HEADER / HUD NAVIGASI -->
+    <header class="game-header">
+      <div class="brand-section" id="brandSection" role="button" tabindex="0" aria-label="Menu Utama Misi Roket">
+        <svg class="brand-logo-icon" viewBox="0 0 24 24">
+          <path d="M12 2.5s3.5 3 3.5 7.5c0 2.2-.8 3.8-1.5 4.8l1.5 3.2-3.5-1.5-3.5 1.5 1.5-3.2c-.7-1-1.5-2.6-1.5-4.8 0-4.5 3.5-7.5 3.5-7.5z"/>
+        </svg>
+        <h1 class="brand-title">Misi Roket</h1>
+      </div>
+
+      <div class="hud-stats">
+        <div class="stat-chip fuel-chip" title="Bahan Bakar Roket" aria-label="Bahan Bakar Roket">
+          <span>⚡</span>
+          <span id="hudFuelValue">100%</span>
+        </div>
+        <div class="stat-chip stars-chip" title="Total Bintang Diraih" aria-label="Total Bintang Diraih">
+          <span>★</span>
+          <span id="hudStarsValue">0</span>
+        </div>
+      </div>
+
+      <div class="hud-actions">
+        <button class="btn-icon-only" id="btnHeaderNotebook" title="Buku Catatan Astronaut" aria-label="Buka Buku Catatan Astronaut">
+          <svg viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg>
+        </button>
+        <button class="btn-icon-only" id="btnHeaderHangar" title="Hangar Kustomisasi Roket" aria-label="Buka Hangar Roket">
+          <svg viewBox="0 0 24 24"><path d="M12 2.5s3.5 3 3.5 7.5c0 2.2-.8 3.8-1.5 4.8l1.5 3.2-3.5-1.5-3.5 1.5 1.5-3.2c-.7-1-1.5-2.6-1.5-4.8 0-4.5 3.5-7.5 3.5-7.5z"/></svg>
+        </button>
+        <button class="btn-icon-only" id="btnToggleSound" title="Suara Musik & Efek" aria-label="Bisukan atau Nyalakan Suara">
+          <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- CONTAINER SCREEN UTAMA -->
+    <main class="view-container">
+
+      <!-- 1. LAYAR JUDUL / AWAL -->
+      <section id="screenTitle" class="game-screen active" aria-labelledby="titleHeading">
+        <div class="title-screen-container">
+          <div class="title-hero-rocket">
+            <svg viewBox="0 0 100 100" width="140" height="140">
+              <polygon points="44,82 50,98 56,82" fill="#f97316">
+                <animate attributeName="points" dur="0.25s" repeatCount="indefinite" values="44,82 50,98 56,82; 43,82 50,105 57,82; 44,82 50,98 56,82"/>
+              </polygon>
+              <polygon points="26,76 38,58 38,78" fill="#ef4444"/>
+              <polygon points="74,76 62,58 62,78" fill="#ef4444"/>
+              <path d="M 50 12 Q 36 38 38 80 L 62 80 Q 64 38 50 12 Z" fill="#ffffff" stroke="#0f172a" stroke-width="1.5"/>
+              <path d="M 50 12 Q 42 28 39 36 L 61 36 Q 58 28 50 12 Z" fill="#ef4444"/>
+              <circle cx="50" cy="44" r="8" fill="#38bdf8" stroke="#0284c7" stroke-width="2"/>
+              <circle cx="48" cy="42" r="2.5" fill="#ffffff" opacity="0.8"/>
+            </svg>
+          </div>
+
+          <h2 id="titleHeading" class="title-main-heading">Misi Roket:<br>Petualangan Tata Surya</h2>
+          <p class="title-subheading">Jelajahi 8 planet megah, sabuk asteroid, dan planet kerdil. Selesaikan simulasi fisika antariksa dan tantangan sains untuk membuka rute penjelajahan!</p>
+
+          <div class="title-action-buttons">
+            <button class="btn btn-primary" id="btnStartGame" style="padding: 16px 36px; font-size: 1.15rem;">
+              🚀 Luncurkan Misi Sekarang
+            </button>
+            <button class="btn btn-secondary" id="btnOpenNotebook">
+              📖 Buku Catatan Astronaut
+            </button>
+            <button class="btn btn-secondary" id="btnOpenHangar">
+              🛸 Hangar Kustomisasi
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. PETA TATA SURYA (SOLAR MAP) -->
+      <section id="screenSolarMap" class="game-screen" aria-labelledby="solarMapHeading">
+        <div class="solar-map-container">
+          <div class="solar-map-header">
+            <div>
+              <h2 id="solarMapHeading" class="solar-map-title">Peta Navigasi Tata Surya</h2>
+              <p style="color: var(--text-muted); font-size: 0.95rem;">Pilih planet tujuanmu. Selesaikan tantangan untuk membuka planet berikutnya!</p>
+            </div>
+            <button class="btn btn-secondary" id="btnMapBack">
+              ◀ Menu Utama
+            </button>
+          </div>
+
+          <!-- Pesan Maskot Kapti -->
+          <div class="mascot-card">
+            <div class="mascot-avatar">
+              <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.93V17a1 1 0 0 1-2 0v-.07A7 7 0 0 1 5.07 11H5a1 1 0 0 1 0-2h.07A7 7 0 0 1 11 3.07V3a1 1 0 0 1 2 0v.07A7 7 0 0 1 18.93 9H19a1 1 0 0 1 0 2h-.07A7 7 0 0 1 13 16.93z"/></svg>
+            </div>
+            <div class="mascot-bubble">
+              <div class="mascot-name">Kapti Astro</div>
+              <div class="mascot-text">Selamat datang di kokpit roket, Penjelajah! Klik planet yang sudah terbuka untuk membaca ringkasan materi dan memulai tantangan antariksa. Kumpulkan bintang untuk membuka variasi roket di Hangar!</div>
+            </div>
+          </div>
+
+          <!-- Grid Planet Tata Surya -->
+          <div class="solar-system-track" id="solarMapGrid" role="region" aria-label="Daftar Planet Tata Surya"></div>
+        </div>
+      </section>
+
+      <!-- 3. LAYAR RINGKASAN MATERI (BRIEFING) -->
+      <section id="screenBriefing" class="game-screen" aria-labelledby="briefingTitle">
+        <div class="briefing-modal-content">
+          <div class="briefing-header">
+            <div class="briefing-planet-avatar" id="briefingPlanetOrb"></div>
+            <div>
+              <div style="font-size: 0.8rem; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase;" id="briefingCategory">Planet Terestrial</div>
+              <h2 id="briefingTitle" class="briefing-title">Nama Planet</h2>
+              <p id="briefingTagline" class="briefing-tagline">Tagline Planet</p>
+            </div>
+          </div>
+
+          <p class="briefing-narrative" id="briefingNarrative">Ringkasan materi singkat tentang kondisi ilmiah planet...</p>
+
+          <h3 style="font-size: 1rem; color: #f8fafc; margin-bottom: 10px;">Data Pengamatan Teleskop:</h3>
+          <div class="stats-grid" id="briefingStatsGrid"></div>
+
+          <div class="mascot-card" style="margin-bottom: 24px;">
+            <div class="mascot-avatar">
+              <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.93V17a1 1 0 0 1-2 0v-.07A7 7 0 0 1 5.07 11H5a1 1 0 0 1 0-2h.07A7 7 0 0 1 11 3.07V3a1 1 0 0 1 2 0v.07A7 7 0 0 1 18.93 9H19a1 1 0 0 1 0 2h-.07A7 7 0 0 1 13 16.93z"/></svg>
+            </div>
+            <div class="mascot-bubble">
+              <div class="mascot-name">Kapti Astro</div>
+              <div class="mascot-text" id="briefingMascotText">Tips penting sebelum kamu memulai misi pendaratan ini!</div>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; gap: 14px;">
+            <button class="btn btn-secondary" id="btnBriefingBack">
+              ◀ Kembali ke Peta
+            </button>
+            <button class="btn btn-primary" id="btnLaunchMission">
+              Mulai Tantangan Misi! ➔
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. ARENA TANTANGAN GAME / MINI-GAME -->
+      <section id="screenChallenge" class="game-screen" aria-labelledby="challengeLevelTitle">
+        <div class="challenge-arena">
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-glass); padding-bottom: 12px;">
+            <div>
+              <h2 id="challengeLevelTitle" style="font-size: 1.35rem; font-weight: 800; color: #ffffff;">Misi Planet</h2>
+              <div id="challengeSubTitle" style="font-size: 0.85rem; color: var(--accent-cyan); font-weight: 600;">Judul Mekanik</div>
+            </div>
+            <button class="btn btn-secondary" id="btnExitChallenge" style="padding: 6px 14px; font-size: 0.85rem;" aria-label="Batal dan Keluar ke Peta">
+              Keluar ke Peta ✕
+            </button>
+          </div>
+
+          <!-- Konten Dinamis yang diisi oleh QuizEngine atau Mini-Game khusus -->
+          <div id="challengeDynamicArea"></div>
+        </div>
+      </section>
+
+      <!-- 5. LAYAR HASIL & UMPAN BALIK (RESULT) -->
+      <section id="screenResult" class="game-screen" aria-labelledby="resultHeading">
+        <div class="briefing-modal-content" style="text-align: center;">
+          <h2 id="resultHeading" style="font-size: 2rem; font-weight: 800; margin-bottom: 8px;">Misi Selesai!</h2>
+          <p style="color: var(--text-muted); font-size: 1.05rem;">Kamu telah berhasil menjelajahi <strong id="resultPlanetName" style="color: #38bdf8;">Planet</strong></p>
+
+          <!-- Deretan Bintang Bintang -->
+          <div id="resultStarsRow" style="display: flex; justify-content: center; gap: 16px; margin: 20px 0;"></div>
+
+          <div style="display: flex; justify-content: center; gap: 24px; margin-bottom: 24px;">
+            <div class="stat-box" style="min-width: 140px;">
+              <div class="stat-box-label">Skor Misi</div>
+              <div class="stat-box-val" id="resultScore" style="font-size: 1.4rem; color: #fbbf24;">0</div>
+            </div>
+            <div class="stat-box" style="min-width: 140px;">
+              <div class="stat-box-label">Sisa Bahan Bakar</div>
+              <div class="stat-box-val" id="resultFuel" style="font-size: 1.4rem; color: #38bdf8;">100%</div>
+            </div>
+          </div>
+
+          <!-- Kotak Lencana Baru -->
+          <div id="resultBadgeBox" style="display: none; align-items: center; gap: 14px; background: rgba(245, 158, 11, 0.15); border: 1.5px solid #f59e0b; border-radius: var(--radius-md); padding: 14px; margin-bottom: 20px; text-align: left;">
+            <div style="font-size: 2.2rem;">🏅</div>
+            <div>
+              <div style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: #fbbf24;">Lencana Baru Terbuka!</div>
+              <div id="resultBadgeTitle" style="font-weight: 700; font-size: 1.05rem; color: #ffffff;">Nama Lencana</div>
+              <div id="resultBadgeDesc" style="font-size: 0.85rem; color: #cbd5e1;">Deskripsi lencana prestasi.</div>
+            </div>
+          </div>
+
+          <!-- Kotak Evaluasi Topik yang Perlu Diulang -->
+          <div id="resultReviewBox" style="display: none; text-align: left; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: var(--radius-md); padding: 16px; margin-bottom: 24px;">
+            <h4 style="color: #f87171; font-size: 0.95rem; margin-bottom: 8px;">📚 Topik yang Perlu Diulang:</h4>
+            <ul id="resultReviewList" style="padding-left: 20px;"></ul>
+          </div>
+
+          <div style="display: flex; justify-content: center; gap: 14px;">
+            <button class="btn btn-secondary" id="btnResultRetry">
+              Ulangi Misi 🔄
+            </button>
+            <button class="btn btn-success" id="btnResultNextPlanet">
+              Lanjut ke Peta Tata Surya ➔
+            </button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- MODAL BUKU CATATAN ASTRONAUT (CODEX) -->
+    <div class="modal-overlay" id="modalNotebook" role="dialog" aria-modal="true" aria-labelledby="notebookModalTitle">
+      <div class="modal-window">
+        <div class="modal-header">
+          <h3 id="notebookModalTitle" class="modal-title">📖 Buku Catatan Astronaut</h3>
+          <button class="btn-icon-only btn-close-modal" aria-label="Tutup Buku Catatan">✕</button>
+        </div>
+        <div class="modal-body">
+          <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 16px;">Kumpulan fakta sains, data pengamatan, dan lencana yang telah kamu buka sepanjang penjelajahan tata surya.</p>
+          <div id="notebookPlanetsList"></div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary btn-close-modal">Tutup Catatan</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL HANGAR ROKET -->
+    <div class="modal-overlay" id="modalHangar" role="dialog" aria-modal="true" aria-labelledby="hangarModalTitle">
+      <div class="modal-window">
+        <div class="modal-header">
+          <h3 id="hangarModalTitle" class="modal-title">🛸 Hangar Kustomisasi Roket</h3>
+          <button class="btn-icon-only btn-close-modal" aria-label="Tutup Hangar">✕</button>
+        </div>
+        <div class="modal-body">
+          <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 16px;">Gunakan bintang yang telah kamu raih untuk membuka variasi lambung roket antariksa baru!</p>
+          <div id="hangarSkinsList" style="display: flex; flex-direction: column; gap: 12px;"></div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary btn-close-modal">Selesai</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Script Modules -->
+  <script src="data/game-data.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/minigames/quiz-engine.js"></script>
+  <script src="js/minigames/atmosphere-puzzle.js"></script>
+  <script src="js/minigames/mars-lander.js"></script>
+  <script src="js/minigames/size-sorter.js"></script>
+  <script src="js/minigames/ring-catcher.js"></script>
+  <script src="js/minigames/card-matcher.js"></script>
+  <script src="js/minigames/dwarf-detective.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>

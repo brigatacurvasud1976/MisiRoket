@@ -1,0 +1,13 @@
+{
+  "name": "misi-roket-petualangan-tata-surya",
+  "version": "1.0.0",
+  "description": "Game edukasi interaktif petualangan tata surya untuk SD/SMP",
+  "main": "serve.js",
+  "scripts": {
+    "start": "node serve.js",
+    "dev": "node serve.js"
+  },
+  "keywords": ["game-edukasi", "tata-surya", "ipa", "astronomi"],
+  "author": "Tim Edukasi Antariksa",
+  "license": "MIT"
+}

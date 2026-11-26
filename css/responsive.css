@@ -1,0 +1,118 @@
+/* css/responsive.css - Media queries, mobile responsive & touch controls */
+
+@media (max-width: 768px) {
+  :root {
+    --header-height: 58px;
+  }
+
+  .game-header {
+    padding: 0 12px;
+  }
+
+  .brand-title {
+    font-size: 0.95rem;
+  }
+
+  .brand-logo-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .stat-chip {
+    padding: 4px 10px;
+    font-size: 0.85rem;
+  }
+
+  .view-container {
+    padding: 16px 12px;
+  }
+
+  .title-main-heading {
+    font-size: 1.5rem;
+    line-height: 1.25;
+    word-break: break-word;
+  }
+
+  .title-subheading {
+    font-size: 0.95rem;
+    margin-bottom: 24px;
+    padding: 0 8px;
+  }
+
+  .title-action-buttons {
+    flex-direction: column;
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .title-action-buttons .btn {
+    width: 100%;
+  }
+
+  .solar-system-track {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .planet-visual-orb {
+    width: 60px;
+    height: 60px;
+  }
+
+  .planet-name {
+    font-size: 1rem;
+  }
+
+  .briefing-modal-content {
+    padding: 20px 16px;
+  }
+
+  .briefing-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .challenge-arena {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .question-prompt {
+    font-size: 1.1rem;
+  }
+
+  .option-btn {
+    padding: 12px 14px;
+    font-size: 0.95rem;
+  }
+
+  .btn {
+    padding: 10px 18px;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .solar-system-track {
+    grid-template-columns: 1fr;
+  }
+
+  .title-main-heading {
+    font-size: 1.65rem;
+  }
+
+  .hud-stats .stat-chip:first-child {
+    display: none; /* Sembunyikan label bahan bakar teks panjang jika layar sangat sempit */
+  }
+}
+
+/* Accessibility: Focus visible */
+*:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
+}
